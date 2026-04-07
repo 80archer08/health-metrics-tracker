@@ -1,16 +1,28 @@
 import express from "express";
-import "express-async-errors"; // important!
+import helmet from "helmet";
 import cors from "cors";
-import authRoutes from "./routes/auth";
-//import metricRoutes from "./routes/metrics.routes";
-import { errorHandler } from "./middleware/errorHandler";
+import morgan from "morgan";
+import { errorHandler } from "./middleware/errorHandler.js";
 
 const app = express();
+
+app.use(helmet());
+app.use(cors());
 app.use(express.json());
+app.use(morgan("dev"));
 
-app.use("/auth", authRoutes);
+app.get("/api/healthcheck", (_req, res) => {
+  res.json({ status: "OK" });
+});
 
-// error handler must be last
+if (process.env.NODE_ENV !== "test") {
+  const { default: authRoutes } = await import("./routes/auth.js");
+  const { default: metricsRoutes } = await import("./routes/metrics.js");
+
+  app.use("/api", authRoutes);
+  app.use("/api/metrics", metricsRoutes);
+}
+
 app.use(errorHandler);
 
 export default app;
