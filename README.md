@@ -1,139 +1,126 @@
-Phase 1: Planning & Setup (2 days)
-Objectives:
-Define 2–3 key metrics to track (e.g., heart rate, steps, sleep hours)
+# Health Metrics Tracker
 
+A full-stack practice project for tracking personal health metrics (heart rate, steps, sleep, calories, weight, blood pressure, glucose).
 
-Design minimal wireframes (input form, dashboard, chart page)
+## Project structure
 
+- `backend/` — Express + TypeScript + Prisma + PostgreSQL
+- `frontend/` — (planned)
 
-Initialize repos: frontend & backend separately
+## Backend quick start
 
+### 1) Prerequisites
 
-Set up environment configs (.env, TypeScript, ESLint, Prettier)
+- Node.js 20+
+- npm 10+
+- Docker (optional, for local Postgres via `docker-compose`)
 
+### 2) Environment variables
 
-Deliverables:
-Project structure created
+Create `backend/.env` (or copy from `.env.example`) with at least:
 
+```env
+DATABASE_URL="postgresql://postgres:postgres@localhost:5432/health_metrics"
+JWT_SECRET="replace-with-a-strong-secret"
+JWT_EXPIRES_IN="7d"
+PORT=5000
+```
 
-Basic README.md with goals and setup instructions
+### 3) Install dependencies
 
+```bash
+cd backend
+npm install
+```
 
-TypeScript configured successfully
+### 4) Start Postgres
 
+Option A (Docker):
 
+```bash
+docker compose up -d
+```
 
-Phase 2: Backend Core (3–4 days)
-Objectives:
-Build RESTful API with endpoints like:
+Option B: Use your local PostgreSQL instance and update `DATABASE_URL` accordingly.
 
+### 5) Prisma setup
 
-POST /metrics → Add new health metric
+```bash
+npm run prisma:generate
+npm run prisma:migrate
+```
 
+### 6) Run backend
 
-GET /metrics → Retrieve all metrics
+Development:
 
+```bash
+npm run dev
+```
 
-GET /metrics/:id → Retrieve by user or day
+Production-style run:
 
+```bash
+npm run build
+npm run start
+```
 
-Set up PostgreSQL database (with Sequelize or Prisma ORM)
+### 7) Test backend
 
+```bash
+npm test
+```
 
-Implement basic input validation and error handling
+This runs a smoke test for `GET /api/healthcheck`.
 
 
-Deliverables:
-Working backend with test data
+## Troubleshooting Prisma CLI permission errors
 
+If you see `sh: 1: prisma: Permission denied`, you likely have one of these local issues:
 
-Postman collection or cURL commands for verification
+1. `node_modules/.bin/prisma` lost executable bit (common after cross-OS dependency copies).
+2. `prisma` and `@prisma/client` versions are out of sync.
 
+Recommended fix:
 
-Database schema finalized
+```bash
+cd backend
+rm -rf node_modules package-lock.json
+npm install
+npm run prisma:generate
+```
 
+If your environment requires elevated filesystem permissions to restore executable bits, authorize the reinstall step in your shell/CI runner and re-run the commands above.
 
+## API endpoints (backend)
 
-Phase 3: Frontend MVP (4–5 days)
-Objectives:
-Create input form (metric type, date, value)
+- `GET /api/healthcheck`
+- `POST /api/register`
+- `POST /api/login`
+- `GET /api/metrics` (auth required)
+- `POST /api/metrics` (auth required)
+- `DELETE /api/metrics/:id` (auth required)
 
+## Example cURL
 
-Display all entries in a responsive table
+Health check:
 
+```bash
+curl http://localhost:5000/api/healthcheck
+```
 
-Implement Chart.js or Recharts for data visualization
+Register:
 
+```bash
+curl -X POST http://localhost:5000/api/register \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Alex","email":"alex@example.com","password":"secret123"}'
+```
 
-Learn how to use TypeScript interfaces and hooks effectively
+Login:
 
-
-Deliverables:
-React + TypeScript app with functioning UI
-
-
-Data fetched from backend API
-
-
-One working chart visualization
-
-
-
-Phase 4: Polishing & Features (3–4 days)
-Objectives:
-Add authentication (JWT or Firebase Auth)
-
-
-Implement simple role or user-based separation (user ID linked to data)
-
-
-Add a “Weekly Summary” card that calculates averages or trends
-
-
-Handle errors gracefully (toast notifications, validation messages)
-
-
-Deliverables:
-Authenticated dashboard
-
-
-Summary/trend analytics
-
-
-Clean UI with consistent TypeScript types
-
-
-
-Phase 5: Documentation & Showcase (2–3 days)
-Objectives:
-Write clear setup instructions (README.md)
-
-
-Record a short demo or add screenshots
-
-
-Deploy to Render, Vercel, or Railway
-
-
-Reflect on “what you learned” — highlight TypeScript, backend/frontend integration, and healthcare data considerations (security, validation, data accuracy)
-
-
-Deliverables:
-Live demo or deployed app
-
-
-Updated README
-
-
-Short LinkedIn-ready summary post
-
-
-
-Total Timeline: ~2.5 weeks (flexible)
-Week 1 → Planning + Backend Core
-
-
-Week 2 → Frontend MVP + Polishing
-
-
-Weekend/Week 3 → Documentation + Deployment
+```bash
+curl -X POST http://localhost:5000/api/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"alex@example.com","password":"secret123"}'
+```
