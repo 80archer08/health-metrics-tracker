@@ -5,7 +5,7 @@ A full-stack practice project for tracking personal health metrics (heart rate, 
 ## Project structure
 
 - `backend/` — Express + TypeScript + Prisma + PostgreSQL
-- `frontend/` — (planned)
+- `frontend/` — React + TypeScript + Vite
 
 ## Backend quick start
 
@@ -72,6 +72,40 @@ npm test
 ```
 
 This runs a smoke test for `GET /api/healthcheck`.
+
+## Frontend quick start
+
+### 1) Prerequisites
+
+- Node.js 20+
+- npm 10+
+
+### 2) Install dependencies
+
+```bash
+cd frontend
+npm install
+```
+
+### 3) Run frontend
+
+Development:
+
+```bash
+npm run dev
+```
+
+Build for production:
+
+```bash
+npm run build
+```
+
+Preview production build locally:
+
+```bash
+npm run preview
+```
 
 
 ## Troubleshooting Prisma CLI permission errors
