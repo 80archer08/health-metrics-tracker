@@ -2,7 +2,9 @@ import express from "express";
 import helmet from "helmet";
 import cors from "cors";
 import morgan from "morgan";
-import { errorHandler } from "./middleware/errorHandler.js";
+import { errorHandler } from "./middleware/errorHandler";
+import authRoutes from "./routes/auth";
+import metricsRoutes from "./routes/metrics";
 
 const app = express();
 
@@ -16,9 +18,6 @@ app.get("/api/healthcheck", (_req, res) => {
 });
 
 if (process.env.NODE_ENV !== "test") {
-  const { default: authRoutes } = await import("./routes/auth.js");
-  const { default: metricsRoutes } = await import("./routes/metrics.js");
-
   app.use("/api", authRoutes);
   app.use("/api/metrics", metricsRoutes);
 }

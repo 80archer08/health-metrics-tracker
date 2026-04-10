@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { requireAuth } from "../middleware/auth.js";
-import { validate } from "../middleware/validate.js";
-import { metricCreateSchema } from "../validation/schemas.js";
-import { prisma } from "../utils/prisma.js";
+import { requireAuth } from "../middleware/auth";
+import { validate } from "../middleware/validate";
+import { metricCreateSchema } from "../validation/schemas";
+import { prisma } from "../utils/prisma";
 
 const router = Router();
 
