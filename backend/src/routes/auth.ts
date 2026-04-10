@@ -1,9 +1,9 @@
 import { Router } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { prisma } from "../utils/prisma.js";
-import { validate } from "../middleware/validate.js";
-import { loginSchema, registerSchema } from "../validation/schemas.js";
+import { prisma } from "../utils/prisma";
+import { validate } from "../middleware/validate";
+import { loginSchema, registerSchema } from "../validation/schemas";
 
 const router = Router();
 const JWT_SECRET = process.env.JWT_SECRET || "changeme";
